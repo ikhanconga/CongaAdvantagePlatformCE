@@ -423,26 +423,33 @@ function inspectElementDetails(element) {
 // View current record data
 async function viewCurrentRecord() {
     try {
-        const recordId = extractRecordIdFromUrl();
-        if (!recordId) {
-            alert('No record ID found on current page');
-            return;
-        }
-        
-        // Send message to background script to fetch record data
-        const response = await chrome.runtime.sendMessage({
-            action: 'apiCall',
-            endpoint: `/records/${recordId}`,
-            options: { method: 'GET' }
+        // Use the new URL extraction method
+        extractObjectDetailsFromUrl(async (objectType, recordId) => {
+            if (!recordId) {
+                alert('No record ID found on current page');
+                return;
+            }
+            
+            try {
+                // Send message to background script to fetch record data
+                const response = await chrome.runtime.sendMessage({
+                    action: 'apiCall',
+                    endpoint: `/v1/objects/${objectType}/${recordId}`,
+                    options: { method: 'GET' }
+                });
+                
+                if (response.success) {
+                    console.log('Record data:', response.data);
+                    displayRecordData(response.data, objectType, recordId);
+                } else {
+                    console.error('Failed to fetch record:', response.error);
+                    alert('Failed to fetch record data: ' + response.error);
+                }
+            } catch (error) {
+                console.error('Error fetching record:', error);
+                alert('Error fetching record: ' + error.message);
+            }
         });
-        
-        if (response.success) {
-            console.log('Record data:', response.data);
-            displayRecordData(response.data);
-        } else {
-            console.error('Failed to fetch record:', response.error);
-            alert('Failed to fetch record data: ' + response.error);
-        }
     } catch (error) {
         console.error('Error viewing record:', error);
         alert('Error viewing record: ' + error.message);

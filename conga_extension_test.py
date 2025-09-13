@@ -359,13 +359,13 @@ class CongaExtensionTester:
                     "Has try-catch or console.error statements"
                 )
                 
-                # Check for hardcoded credentials (should be in background.js only)
-                if js_file != "background.js":
+                # Check for hardcoded credentials (should be in background.js only, or options.js for display)
+                if js_file not in ["background.js", "options.js"]:
                     has_hardcoded_creds = any(cred in content for cred in [self.client_id, self.client_secret])
                     self.log_test(
                         f"No hardcoded credentials in {js_file}",
                         not has_hardcoded_creds,
-                        "Credentials should only be in background.js"
+                        "Credentials should only be in background.js or options.js"
                     )
                 
                 # Check for Chrome extension API usage

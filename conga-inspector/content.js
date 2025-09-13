@@ -477,14 +477,24 @@ function extractRecordIdFromUrl() {
 }
 
 // Display record data
-function displayRecordData(data) {
+function displayRecordData(data, objectType, recordId) {
     if (!inspectorPanel) return;
     
     const content = inspectorPanel.querySelector('#inspectorContent');
     const recordSection = document.createElement('div');
     recordSection.className = 'inspector-section';
     recordSection.innerHTML = `
-        <h4>Record Data</h4>
+        <h4>Record Data - ${objectType || 'Unknown'}</h4>
+        <div class="record-info">
+            <div class="info-row">
+                <span class="info-label">Object Type:</span>
+                <span class="info-value">${objectType || 'N/A'}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Record ID:</span>
+                <span class="info-value">${recordId || 'N/A'}</span>
+            </div>
+        </div>
         <div class="record-data">
             <pre>${JSON.stringify(data, null, 2)}</pre>
         </div>

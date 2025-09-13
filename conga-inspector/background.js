@@ -29,8 +29,7 @@ async function getAccessToken() {
       body: new URLSearchParams({
         grant_type: 'client_credentials',
         client_id: CONFIG.CLIENT_ID,
-        client_secret: CONFIG.CLIENT_SECRET,
-        scope: 'data:read data:write'
+        client_secret: CONFIG.CLIENT_SECRET
       })
     });
 

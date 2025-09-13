@@ -284,8 +284,8 @@ class CongaExtensionTester:
         
         # Test endpoints
         test_endpoints = [
-            ('/objects', 'GET', 'List objects'),
-            ('/objects/metadata', 'GET', 'Get metadata'),
+            ('/swagger', 'GET', 'Swagger documentation'),
+            ('/swagger/v1/swagger.json', 'GET', 'OpenAPI spec'),
         ]
         
         for endpoint, method, description in test_endpoints:

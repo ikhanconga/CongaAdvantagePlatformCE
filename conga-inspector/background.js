@@ -98,6 +98,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         .catch(error => sendResponse({ success: false, error: error.message }));
       return true; // Will respond asynchronously
 
+    case 'openSidePanel':
+      // Handle opening side panel from content script
+      if (sender.tab && sender.tab.id) {
+        chrome.sidePanel.open({ tabId: sender.tab.id })
+          .then(() => sendResponse({ success: true }))
+          .catch(error => sendResponse({ success: false, error: error.message }));
+      } else {
+        sendResponse({ success: false, error: 'Invalid tab context' });
+      }
+      return true; // Will respond asynchronously
+
     case 'getConfig':
       sendResponse({ 
         success: true, 

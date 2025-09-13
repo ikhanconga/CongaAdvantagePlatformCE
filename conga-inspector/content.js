@@ -410,8 +410,14 @@ async function exportCurrentRecord() {
 // Open API explorer
 async function openApiExplorer() {
     try {
-        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        await chrome.sidePanel.open({ tabId: tabs[0].id });
+        // Send message to background script to open side panel
+        const response = await chrome.runtime.sendMessage({
+            action: 'openSidePanel'
+        });
+        
+        if (!response.success) {
+            throw new Error(response.error || 'Failed to open side panel');
+        }
     } catch (error) {
         console.error('Failed to open API explorer:', error);
         alert('Failed to open API explorer');

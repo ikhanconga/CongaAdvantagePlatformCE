@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Side Panel Fix</title>
+</head>
+<body>
+    <h1>Test the Side Panel Fix</h1>
+    <p>This page simulates being on a Conga domain to test the side panel functionality.</p>
+    
+    <button id="testSidePanel">Test Open API Explorer</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        // Simulate the fixed content script behavior
+        document.getElementById('testSidePanel').addEventListener('click', async () => {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing side panel opening...</p>';
+            
+            try {
+                // This simulates what the content script now does
+                const response = await chrome.runtime.sendMessage({
+                    action: 'openSidePanel'
+                });
+                
+                if (response.success) {
+                    results.innerHTML = '<p style="color: green;">✅ Side panel opened successfully!</p>';
+                } else {
+                    results.innerHTML = `<p style="color: red;">❌ Failed: ${response.error}</p>`;
+                }
+            } catch (error) {
+                results.innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

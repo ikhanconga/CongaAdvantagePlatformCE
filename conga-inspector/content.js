@@ -570,12 +570,17 @@ function updatePageInfo() {
     const currentObject = inspectorPanel.querySelector('#currentObject');
     const currentRecordId = inspectorPanel.querySelector('#currentRecordId');
     
-    // Extract object type and record ID from URL
-    const objectType = extractObjectTypeFromUrl();
-    const recordId = extractRecordIdFromUrl();
-    
-    if (currentObject) currentObject.textContent = objectType || 'Unknown';
-    if (currentRecordId) currentRecordId.textContent = recordId || 'N/A';
+    // Use the new URL extraction method
+    extractObjectDetailsFromUrl((objectType, recordId) => {
+        if (currentObject) {
+            currentObject.textContent = objectType || 'Unknown';
+        }
+        if (currentRecordId) {
+            currentRecordId.textContent = recordId || 'N/A';
+        }
+        
+        console.log('Page info updated:', { objectType, recordId });
+    });
 }
 
 // Extract object type from URL

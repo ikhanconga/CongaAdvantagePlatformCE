@@ -456,25 +456,6 @@ async function viewCurrentRecord() {
     }
 }
 
-// Extract record ID from current URL
-function extractRecordIdFromUrl() {
-    const url = window.location.href;
-    // This would need to be customized based on actual Conga URL patterns
-    const patterns = [
-        /\/record\/([a-zA-Z0-9-]+)/,
-        /\/([a-zA-Z0-9-]{36})\/view/,
-        /id=([a-zA-Z0-9-]+)/
-    ];
-    
-    for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match) {
-            return match[1];
-        }
-    }
-    
-    return null;
-}
 
 // Display record data
 function displayRecordData(data, objectType, recordId) {

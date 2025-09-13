@@ -109,6 +109,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
       return true; // Will respond asynchronously
 
+    case 'getActiveTab':
+      // Handle getting active tab info for URL parsing
+      chrome.tabs.query({ active: true, currentWindow: true })
+        .then(tabs => {
+          if (tabs.length > 0) {
+            sendResponse({ success: true, url: tabs[0].url, title: tabs[0].title });
+          } else {
+            sendResponse({ success: false, error: 'No active tab found' });
+          }
+        })
+        .catch(error => sendResponse({ success: false, error: error.message }));
+      return true; // Will respond asynchronously
+
     case 'getConfig':
       sendResponse({ 
         success: true, 

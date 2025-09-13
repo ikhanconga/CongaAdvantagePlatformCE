@@ -502,35 +502,42 @@ function displayRecordData(data) {
 // Export current record
 async function exportCurrentRecord() {
     try {
-        const recordId = extractRecordIdFromUrl();
-        if (!recordId) {
-            alert('No record ID found on current page');
-            return;
-        }
-        
-        const response = await chrome.runtime.sendMessage({
-            action: 'apiCall',
-            endpoint: `/records/${recordId}`,
-            options: { method: 'GET' }
+        // Use the new URL extraction method
+        extractObjectDetailsFromUrl(async (objectType, recordId) => {
+            if (!recordId) {
+                alert('No record ID found on current page');
+                return;
+            }
+            
+            try {
+                const response = await chrome.runtime.sendMessage({
+                    action: 'apiCall',
+                    endpoint: `/v1/objects/${objectType}/${recordId}`,
+                    options: { method: 'GET' }
+                });
+                
+                if (response.success) {
+                    const dataStr = JSON.stringify(response.data, null, 2);
+                    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(dataBlob);
+                    
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `conga-${objectType}-${recordId}.json`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    
+                    console.log('Record exported successfully');
+                } else {
+                    alert('Failed to export record: ' + response.error);
+                }
+            } catch (error) {
+                console.error('Error exporting record:', error);
+                alert('Error exporting record: ' + error.message);
+            }
         });
-        
-        if (response.success) {
-            const dataStr = JSON.stringify(response.data, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `conga-record-${recordId}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            console.log('Record exported successfully');
-        } else {
-            alert('Failed to export record: ' + response.error);
-        }
     } catch (error) {
         console.error('Error exporting record:', error);
         alert('Error exporting record: ' + error.message);

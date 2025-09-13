@@ -588,25 +588,7 @@ function updatePageInfo() {
     });
 }
 
-// Extract object type from URL
-function extractObjectTypeFromUrl() {
-    const url = window.location.href;
-    // This would need to be customized based on actual Conga URL patterns
-    const patterns = [
-        /\/([a-zA-Z]+)\/record/,
-        /\/object\/([a-zA-Z]+)/,
-        /\/([a-zA-Z]+)\/[a-zA-Z0-9-]+\/view/
-    ];
-    
-    for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match) {
-            return match[1];
-        }
-    }
-    
-    return null;
-}
+
 
 // Inject page enhancement script
 function injectPageScript() {

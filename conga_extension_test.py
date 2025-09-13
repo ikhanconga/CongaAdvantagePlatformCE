@@ -122,21 +122,21 @@ class CongaExtensionTester:
             
             # Check required fields
             required_fields = {
-                "manifest_version": 3,
-                "name": str,
-                "version": str,
-                "description": str,
-                "permissions": list,
-                "host_permissions": list,
-                "background": dict,
-                "content_scripts": list,
-                "action": dict
+                "manifest_version": (int, 3),
+                "name": (str, None),
+                "version": (str, None),
+                "description": (str, None),
+                "permissions": (list, None),
+                "host_permissions": (list, None),
+                "background": (dict, None),
+                "content_scripts": (list, None),
+                "action": (dict, None)
             }
             
-            for field, expected_type in required_fields.items():
+            for field, (expected_type, expected_value) in required_fields.items():
                 if field in manifest:
-                    if expected_type == int:
-                        valid = isinstance(manifest[field], int) and manifest[field] == 3
+                    if expected_value is not None:
+                        valid = isinstance(manifest[field], expected_type) and manifest[field] == expected_value
                     else:
                         valid = isinstance(manifest[field], expected_type)
                     

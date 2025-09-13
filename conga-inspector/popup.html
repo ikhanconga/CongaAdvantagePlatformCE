@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conga Inspector</title>
+    <link rel="stylesheet" href="styles/popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="icons/icon32.png" alt="Conga Inspector" class="logo-img">
+                <h2>Conga Inspector</h2>
+            </div>
+            <div class="status-indicator" id="connectionStatus">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Connecting...</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Quick Actions -->
+            <div class="section">
+                <h3>Quick Actions</h3>
+                <div class="button-grid">
+                    <button class="action-btn primary" id="openSidePanel">
+                        <span class="icon">🔍</span>
+                        API Explorer
+                    </button>
+                    <button class="action-btn" id="exportData">
+                        <span class="icon">📤</span>
+                        Export Data
+                    </button>
+                    <button class="action-btn" id="importData">
+                        <span class="icon">📥</span>
+                        Import Data
+                    </button>
+                    <button class="action-btn" id="viewMetadata">
+                        <span class="icon">📋</span>
+                        Metadata
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Page Info -->
+            <div class="section" id="pageInfoSection" style="display: none;">
+                <h3>Current Page</h3>
+                <div class="info-box">
+                    <div class="info-item">
+                        <label>Object Type:</label>
+                        <span id="currentObject">-</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Record ID:</label>
+                        <span id="currentRecordId">-</span>
+                    </div>
+                    <div class="info-item">
+                        <label>URL:</label>
+                        <span id="currentUrl">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="section">
+                <h3>Platform Info</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="apiCalls">-</div>
+                        <div class="stat-label">API Calls</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="lastSync">-</div>
+                        <div class="stat-label">Last Sync</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="recordCount">-</div>
+                        <div class="stat-label">Records</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="errorCount">0</div>
+                        <div class="stat-label">Errors</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section">
+                <h3>Recent Activity</h3>
+                <div class="activity-list" id="activityList">
+                    <div class="activity-item">
+                        <span class="activity-time">Just now</span>
+                        <span class="activity-desc">Extension loaded</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="btn-link" id="openOptions">Settings</button>
+            <button class="btn-link" id="viewLogs">View Logs</button>
+            <button class="btn-link" id="refresh">
+                <span class="icon">🔄</span>
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

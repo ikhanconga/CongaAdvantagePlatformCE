@@ -247,13 +247,11 @@ async function loadCurrentPageInfo() {
             pageInfoSection.style.display = 'block';
             currentUrlSpan.textContent = currentTab.url;
             
-            // Try to extract object info from URL
-            const urlParts = currentTab.url.split('/');
-            if (urlParts.length > 3) {
-                // This is a simplified extraction - would need to be enhanced based on actual Conga URL structure
-                currentObjectSpan.textContent = urlParts[urlParts.length - 2] || 'Unknown';
-                currentRecordIdSpan.textContent = urlParts[urlParts.length - 1] || 'N/A';
-            }
+            // Use the new URL extraction method
+            extractObjectDetailsFromUrl((objectType, recordId) => {
+                currentObjectSpan.textContent = objectType || 'Unknown';
+                currentRecordIdSpan.textContent = recordId || 'N/A';
+            });
         }
     } catch (error) {
         console.error('Failed to load page info:', error);

@@ -6,7 +6,7 @@ const CONFIG = {
   CLIENT_ID: '6ebb98c7-dd82-4780-b1ac-c0dc3f7ed43e',
   CLIENT_SECRET: 'RK5h@?8gM_-6PEF@4-hzd73W',
   TOKEN_URL: 'https://login-preview.congacloud.eu/api/v1/auth/connect/token',
-  API_BASE_URL: 'https://rls-preview.congacloud.eu/api/data',
+  API_BASE_URL: 'https://rls-preview.congacloud.eu/api/data/v1',
   PLATFORM_DOMAIN: 'https://rls-preview.congacloud.eu'
 };
 

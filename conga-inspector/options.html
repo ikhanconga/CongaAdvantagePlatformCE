@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conga Inspector - Settings</title>
+    <link rel="stylesheet" href="styles/options.css">
+</head>
+<body>
+    <div class="options-container">
+        <div class="options-header">
+            <h1>Conga Inspector Settings</h1>
+            <p>Configure your Conga Advantage Platform Inspector extension</p>
+        </div>
+
+        <div class="options-content">
+            <div class="settings-section">
+                <h2>🔐 Authentication</h2>
+                <div class="setting-group">
+                    <div class="setting-item">
+                        <label for="clientId">Client ID:</label>
+                        <input type="text" id="clientId" readonly value="6ebb98c7-dd82-4780-b1ac-c0dc3f7ed43e">
+                        <span class="setting-description">Your Conga platform Client ID (read-only)</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="clientSecret">Client Secret:</label>
+                        <input type="password" id="clientSecret" readonly value="RK5h@?8gM_-6PEF@4-hzd73W">
+                        <span class="setting-description">Your Conga platform Client Secret (read-only)</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="tokenUrl">Token URL:</label>
+                        <input type="url" id="tokenUrl" readonly value="https://login-preview.congacloud.eu/api/v1/auth/connect/token">
+                        <span class="setting-description">Conga authentication endpoint</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="apiBaseUrl">API Base URL:</label>
+                        <input type="url" id="apiBaseUrl" readonly value="https://rls-preview.congacloud.eu/api/data">
+                        <span class="setting-description">Conga API base endpoint</span>
+                    </div>
+                    
+                    <div class="setting-actions">
+                        <button id="testConnection" class="btn primary">Test Connection</button>
+                        <button id="refreshToken" class="btn secondary">Refresh Token</button>
+                    </div>
+                    
+                    <div class="connection-status" id="authStatus">
+                        <span class="status-indicator" id="authStatusDot"></span>
+                        <span id="authStatusText">Not tested</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>⚙️ General Settings</h2>
+                <div class="setting-group">
+                    <div class="setting-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="enableLogging" checked>
+                            <span class="checkmark"></span>
+                            Enable debug logging
+                        </label>
+                        <span class="setting-description">Log API calls and extension activities to console</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="autoRefresh" checked>
+                            <span class="checkmark"></span>
+                            Auto-refresh data
+                        </label>
+                        <span class="setting-description">Automatically refresh data when switching tabs</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showNotifications" checked>
+                            <span class="checkmark"></span>
+                            Show notifications
+                        </label>
+                        <span class="setting-description">Display browser notifications for important events</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="apiTimeout">API Timeout (seconds):</label>
+                        <input type="number" id="apiTimeout" value="30" min="5" max="120">
+                        <span class="setting-description">Maximum time to wait for API responses</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="maxResults">Max Results per Query:</label>
+                        <input type="number" id="maxResults" value="100" min="10" max="1000">
+                        <span class="setting-description">Default maximum number of records to fetch</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>🎨 Interface</h2>
+                <div class="setting-group">
+                    <div class="setting-item">
+                        <label for="theme">Theme:</label>
+                        <select id="theme">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="auto">Auto (System)</option>
+                        </select>
+                        <span class="setting-description">Choose your preferred color theme</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="fontSize">Font Size:</label>
+                        <select id="fontSize">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                        <span class="setting-description">Adjust text size for better readability</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="compactMode">
+                            <span class="checkmark"></span>
+                            Compact mode
+                        </label>
+                        <span class="setting-description">Use less spacing for more content on screen</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>📊 Data & Export</h2>
+                <div class="setting-group">
+                    <div class="setting-item">
+                        <label for="exportFormat">Default Export Format:</label>
+                        <select id="exportFormat">
+                            <option value="json" selected>JSON</option>
+                            <option value="csv">CSV</option>
+                            <option value="xlsx">Excel</option>
+                        </select>
+                        <span class="setting-description">Default format for data exports</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeMetadata" checked>
+                            <span class="checkmark"></span>
+                            Include metadata in exports
+                        </label>
+                        <span class="setting-description">Add field descriptions and metadata to exported data</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="dateFormat">Date Format:</label>
+                        <select id="dateFormat">
+                            <option value="iso">ISO 8601 (2024-01-15T10:30:00Z)</option>
+                            <option value="us">US Format (01/15/2024 10:30 AM)</option>
+                            <option value="eu">EU Format (15/01/2024 10:30)</option>
+                            <option value="short" selected>Short (Jan 15, 2024)</option>
+                        </select>
+                        <span class="setting-description">How dates should be displayed and exported</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h2>🔍 Advanced</h2>
+                <div class="setting-group">
+                    <div class="setting-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="interceptNetworkRequests" checked>
+                            <span class="checkmark"></span>
+                            Intercept network requests
+                        </label>
+                        <span class="setting-description">Monitor all network requests on Conga pages</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="cacheApiResponses">
+                            <span class="checkmark"></span>
+                            Cache API responses
+                        </label>
+                        <span class="setting-description">Cache responses to improve performance (cleared on browser restart)</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="cacheDuration">Cache Duration (minutes):</label>
+                        <input type="number" id="cacheDuration" value="5" min="1" max="60">
+                        <span class="setting-description">How long to cache API responses</span>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="customHeaders">Custom Headers (JSON):</label>
+                        <textarea id="customHeaders" rows="3" placeholder='{"Custom-Header": "value"}'>{}</textarea>
+                        <span class="setting-description">Additional headers to send with API requests</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="options-footer">
+            <button id="saveSettings" class="btn primary">Save Settings</button>
+            <button id="resetSettings" class="btn secondary">Reset to Defaults</button>
+            <button id="exportSettings" class="btn secondary">Export Settings</button>
+            <button id="importSettings" class="btn secondary">Import Settings</button>
+        </div>
+
+        <div class="version-info">
+            <p>Conga Inspector v1.0.0</p>
+            <p>Built for Conga Advantage Platform</p>
+        </div>
+    </div>
+
+    <input type="file" id="importFile" accept=".json" style="display: none;">
+
+    <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conga API Explorer</title>
+    <link rel="stylesheet" href="styles/sidepanel.css">
+</head>
+<body>
+    <div class="sidepanel-container">
+        <div class="sidepanel-header">
+            <div class="header-title">
+                <img src="icons/icon32.png" alt="Conga Inspector" class="header-icon">
+                <h1>Conga API Explorer</h1>
+            </div>
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Connecting...</span>
+            </div>
+        </div>
+
+        <div class="sidepanel-content">
+            <!-- API Explorer Tab -->
+            <div class="tab-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="explorer">API Explorer</button>
+                    <button class="tab-btn" data-tab="metadata">Metadata</button>
+                    <button class="tab-btn" data-tab="data">Data Browser</button>
+                    <button class="tab-btn" data-tab="network">Network</button>
+                </div>
+
+                <!-- API Explorer Tab Content -->
+                <div class="tab-content active" id="explorer">
+                    <div class="section">
+                        <h3>Query Builder</h3>
+                        <div class="query-builder">
+                            <div class="form-group">
+                                <label for="httpMethod">Method:</label>
+                                <select id="httpMethod">
+                                    <option value="GET">GET</option>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="DELETE">DELETE</option>
+                                    <option value="PATCH">PATCH</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="apiEndpoint">Endpoint:</label>
+                                <input type="text" id="apiEndpoint" placeholder="/api/data/objects" value="/api/data/objects">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="queryParams">Query Parameters:</label>
+                                <textarea id="queryParams" placeholder='{"limit": 10, "offset": 0}' rows="3"></textarea>
+                            </div>
+                            
+                            <div class="form-group" id="requestBodyGroup" style="display: none;">
+                                <label for="requestBody">Request Body:</label>
+                                <textarea id="requestBody" placeholder='{"key": "value"}' rows="5"></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button id="executeQuery" class="btn primary">Execute Query</button>
+                                <button id="clearQuery" class="btn secondary">Clear</button>
+                                <button id="saveQuery" class="btn secondary">Save Query</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Response</h3>
+                        <div class="response-container">
+                            <div class="response-header" id="responseHeader">
+                                <span class="response-status" id="responseStatus">Ready</span>
+                                <span class="response-time" id="responseTime"></span>
+                            </div>
+                            <div class="response-body">
+                                <pre id="responseBody">Execute a query to see results...</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Saved Queries</h3>
+                        <div class="saved-queries" id="savedQueries">
+                            <div class="query-item">
+                                <span class="query-name">Get All Objects</span>
+                                <span class="query-method">GET</span>
+                                <button class="query-load-btn">Load</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metadata Tab Content -->
+                <div class="tab-content" id="metadata">
+                    <div class="section">
+                        <h3>Object Explorer</h3>
+                        <div class="object-search">
+                            <input type="text" id="objectSearch" placeholder="Search objects...">
+                            <button id="refreshObjects" class="btn secondary">Refresh</button>
+                        </div>
+                        <div class="object-list" id="objectList">
+                            <div class="loading">Loading objects...</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Object Details</h3>
+                        <div class="object-details" id="objectDetails">
+                            <div class="empty-state">Select an object to view details</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Browser Tab Content -->
+                <div class="tab-content" id="data">
+                    <div class="section">
+                        <h3>Data Query</h3>
+                        <div class="data-query">
+                            <div class="form-group">
+                                <label for="dataObject">Object:</label>
+                                <select id="dataObject">
+                                    <option value="">Select Object</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dataFields">Fields (comma-separated):</label>
+                                <input type="text" id="dataFields" placeholder="id, name, createdDate" value="*">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dataWhere">Where Clause:</label>
+                                <input type="text" id="dataWhere" placeholder="name LIKE 'Test%'">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dataLimit">Limit:</label>
+                                <input type="number" id="dataLimit" value="10" min="1" max="200">
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button id="queryData" class="btn primary">Query Data</button>
+                                <button id="exportData" class="btn secondary">Export CSV</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Results</h3>
+                        <div class="data-results" id="dataResults">
+                            <div class="empty-state">Execute a query to see results</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Tab Content -->
+                <div class="tab-content" id="network">
+                    <div class="section">
+                        <h3>Network Monitor</h3>
+                        <div class="network-controls">
+                            <button id="clearNetwork" class="btn secondary">Clear</button>
+                            <button id="exportNetwork" class="btn secondary">Export HAR</button>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="autoScroll" checked>
+                                Auto-scroll
+                            </label>
+                        </div>
+                        <div class="network-list" id="networkList">
+                            <div class="network-header">
+                                <span class="col-method">Method</span>
+                                <span class="col-url">URL</span>
+                                <span class="col-status">Status</span>
+                                <span class="col-time">Time</span>
+                            </div>
+                            <div class="network-empty">No network requests captured</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Request Details</h3>
+                        <div class="request-details" id="requestDetails">
+                            <div class="empty-state">Select a network request to view details</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="sidepanel.js"></script>
+</body>
+</html>

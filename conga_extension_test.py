@@ -193,67 +193,80 @@ class CongaExtensionTester:
             self.log_test("Token endpoint accessible", False, f"Connection error: {e}")
             return
         
-        # Test OAuth2 token request
-        try:
-            token_data = {
-                'grant_type': 'client_credentials',
-                'client_id': self.client_id,
-                'client_secret': self.client_secret,
-                'scope': 'data:read data:write'
-            }
-            
-            headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'User-Agent': 'Conga-Inspector-Test/1.0'
-            }
-            
-            print(f"    Requesting token from: {self.token_url}")
-            print(f"    Client ID: {self.client_id}")
-            print(f"    Scope: {token_data['scope']}")
-            
-            response = requests.post(
-                self.token_url,
-                data=token_data,
-                headers=headers,
-                timeout=30
-            )
-            
-            self.log_test(
-                "OAuth2 token request",
-                response.status_code == 200,
-                f"Status: {response.status_code}, Response: {response.text[:200]}"
-            )
-            
-            if response.status_code == 200:
-                try:
-                    token_response = response.json()
-                    self.access_token = token_response.get('access_token')
-                    
-                    required_fields = ['access_token', 'token_type', 'expires_in']
-                    for field in required_fields:
-                        has_field = field in token_response
-                        self.log_test(
-                            f"Token response has '{field}'",
-                            has_field,
-                            f"Value: {token_response.get(field, 'N/A')}"
-                        )
-                    
-                    # Validate token format (should be JWT or similar)
-                    if self.access_token:
-                        token_valid = len(self.access_token) > 50  # Basic length check
-                        self.log_test(
-                            "Access token format valid",
-                            token_valid,
-                            f"Token length: {len(self.access_token)}"
-                        )
+        # Test OAuth2 token request with different scopes
+        scopes_to_test = [
+            'data:read data:write',
+            'read write',
+            'api',
+            'full_access',
+            ''  # No scope
+        ]
+        
+        for scope in scopes_to_test:
+            try:
+                token_data = {
+                    'grant_type': 'client_credentials',
+                    'client_id': self.client_id,
+                    'client_secret': self.client_secret,
+                }
+                
+                if scope:
+                    token_data['scope'] = scope
+                
+                headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'User-Agent': 'Conga-Inspector-Test/1.0'
+                }
+                
+                print(f"    Testing scope: '{scope}' from: {self.token_url}")
+                
+                response = requests.post(
+                    self.token_url,
+                    data=token_data,
+                    headers=headers,
+                    timeout=30
+                )
+                
+                scope_label = scope if scope else 'no-scope'
+                success = response.status_code == 200
+                
+                self.log_test(
+                    f"OAuth2 token request (scope: {scope_label})",
+                    success,
+                    f"Status: {response.status_code}, Response: {response.text[:200]}"
+                )
+                
+                if success:
+                    try:
+                        token_response = response.json()
+                        self.access_token = token_response.get('access_token')
                         
-                except json.JSONDecodeError:
-                    self.log_test("Token response JSON valid", False, "Invalid JSON response")
-            
-        except requests.exceptions.Timeout:
-            self.log_test("OAuth2 token request", False, "Request timeout (30s)")
-        except requests.exceptions.RequestException as e:
-            self.log_test("OAuth2 token request", False, f"Request error: {e}")
+                        required_fields = ['access_token', 'token_type', 'expires_in']
+                        for field in required_fields:
+                            has_field = field in token_response
+                            self.log_test(
+                                f"Token response has '{field}' (scope: {scope_label})",
+                                has_field,
+                                f"Value: {token_response.get(field, 'N/A')}"
+                            )
+                        
+                        # Validate token format (should be JWT or similar)
+                        if self.access_token:
+                            token_valid = len(self.access_token) > 50  # Basic length check
+                            self.log_test(
+                                f"Access token format valid (scope: {scope_label})",
+                                token_valid,
+                                f"Token length: {len(self.access_token)}"
+                            )
+                            break  # Stop testing other scopes if we got a valid token
+                            
+                    except json.JSONDecodeError:
+                        self.log_test(f"Token response JSON valid (scope: {scope_label})", False, "Invalid JSON response")
+                
+            except requests.exceptions.Timeout:
+                self.log_test(f"OAuth2 token request (scope: {scope_label})", False, "Request timeout (30s)")
+            except requests.exceptions.RequestException as e:
+                self.log_test(f"OAuth2 token request (scope: {scope_label})", False, f"Request error: {e}")
 
     def test_api_connectivity(self):
         """Test 4: Test API connectivity with authenticated requests"""
